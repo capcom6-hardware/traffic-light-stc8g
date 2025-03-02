@@ -2,6 +2,8 @@
 
 #include "gpio.h"
 
+#include "settings.h"
+
 #define SECOND_COUNTER 60
 #define SECOND_TIMER 65536 - (F_CPU / 12 / SECOND_COUNTER)
 
@@ -82,9 +84,6 @@ void setup()
     EA = 1;  // global interrupt
 }
 
-#define CYCLE_DURATION_SECONDS 15
-#define CYCLES_COUNT 10
-
 void wait(int duration)
 {
     int time = seconds;
@@ -93,7 +92,7 @@ void wait(int duration)
         ;
 }
 
-void loop()
+void automobileLoop()
 {
     writeGreen(LED_ON);
     wait(CYCLE_DURATION_SECONDS);
@@ -116,6 +115,35 @@ void loop()
 
     writeYellow(LED_OFF);
     writeRed(LED_OFF);
+}
+
+void pedestrianLoop()
+{
+    writeRed(LED_ON);
+    wait(CYCLE_DURATION_SECONDS + 6);
+
+    writeRed(LED_OFF);
+    writeGreen(LED_ON);
+    wait(CYCLE_DURATION_SECONDS - 3);
+
+    for (int i = 0; i < 3; i++)
+    {
+        writeGreen(LED_TOGGLE);
+        wait(1);
+    }
+    writeGreen(LED_OFF);
+}
+
+void loop()
+{
+    if (CURRENT_MODE == MODE_AUTOMOBILE)
+    {
+        automobileLoop();
+    }
+    else if (CURRENT_MODE == MODE_PEDESTRIAN)
+    {
+        pedestrianLoop();
+    }
 }
 
 void powerDown()
