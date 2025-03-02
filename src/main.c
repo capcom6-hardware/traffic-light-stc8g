@@ -124,7 +124,7 @@ void pedestrianLoop()
 
     writeRed(LED_OFF);
     writeGreen(LED_ON);
-    wait(CYCLE_DURATION_SECONDS - 3);
+    wait(CYCLE_DURATION_SECONDS - 1);
 
     for (int i = 0; i < 3; i++)
     {
